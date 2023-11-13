@@ -1,7 +1,7 @@
 #include "DebugStrings.h"
 
 #include "PlayerEntity.h"
-#include "ContextHelpers.h"
+#include "MathAssignment/ContextHelpers.h"
 #include "Engine/Canvas.h"
 
 void FDebugTextDelegateHelper::DrawDebugLabels(UCanvas* Canvas, APlayerController* PlayerController)

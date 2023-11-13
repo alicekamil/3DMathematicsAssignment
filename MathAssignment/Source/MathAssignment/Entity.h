@@ -16,13 +16,8 @@ public:
 	AEntity();
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category="Base")
 	UStaticMeshComponent* StaticMeshComponent;
-
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	
 };

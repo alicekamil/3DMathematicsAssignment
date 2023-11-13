@@ -17,7 +17,7 @@
 #include "CoreMinimal.h"
 #include "RelativeContext.h"
 #include "Constants.h"
-//#include "StateDemonstrator.h"
+#include "PlayerEntity.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "ContextHelpers.generated.h"
 
@@ -72,6 +72,16 @@ public:
 			SET_BIT(ReturnContext, ERelativeContext::FacingSame);
 		else if (FacingDot < -CONST_DirectionThreshold)
 			SET_BIT(ReturnContext, ERelativeContext::FacingOpposite);
+
+		if(const auto OtherStateDemonstrator = Cast<APlayerEntity>(Other))
+		{
+			const auto Health = OtherStateDemonstrator->Health;
+			
+			if(Health < CONST_DyingThreshold)
+				SET_BIT(ReturnContext, ERelativeContext::NearDeath);
+			else if (Health < CONST_HurtThreshold)
+				SET_BIT(ReturnContext, ERelativeContext::Hurt);
+		}
 
 		return ReturnContext;
 	}

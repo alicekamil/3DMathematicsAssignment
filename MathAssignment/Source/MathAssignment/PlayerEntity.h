@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Entity.h"
+#include "SpellTypes.h"
 #include "PlayerEntity.generated.h"
 
 UCLASS()
@@ -22,8 +23,11 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="State", meta=(UIMin=0,UIMax=100))
 	float Health;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="SpellState", meta=(Bitmask, BitmaskEnum = "ESpellTypes"))
+	uint8 SpellState;
 	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="State", meta=(Bitmask, BitmaskEnum = "/Script/FGGameplayMath.ERelativeContext"))
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="State", meta=(Bitmask, BitmaskEnum = "ERelativeContext"))
 	int32 Context;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Context")
@@ -32,8 +36,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Context")
 	bool DrawArc;
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	UFUNCTION(BlueprintCallable)
+	void Attack();
 	
 };

@@ -6,14 +6,4 @@ AEntity::AEntity()
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 }
 
-void AEntity::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-void AEntity::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
 
