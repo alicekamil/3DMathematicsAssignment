@@ -2,10 +2,12 @@
 #include "DrawDebugHelpers.h"
 #include "EnhancedInputSubSystems.h"
 #include "Constants.h"
+#include "ShapeDrawUtility.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "EnhancedInputComponent.h"
+#include "IntersectionSubsystem.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
@@ -34,12 +36,55 @@ AHeroCharacter::AHeroCharacter()
 
 }
 
+void AHeroCharacter::DrawShape(const FColor Color)
+{
+	if(Drawn) return;
+	
+	Drawn = true;
+
+	const auto Location = GetActorLocation();
+	const auto WorldContext = GetWorld();
+	
+	switch(IntersectionType.GetValue())
+	{
+	case EIntersection::Sphere:
+		UShapeDrawUtility::Sphere(WorldContext, Location, Radius, Color);
+		break;
+
+	case EIntersection::Plane:
+		UShapeDrawUtility::Plane(WorldContext, Location, GetActorUpVector(), GetActorQuat(), Color);
+		break;
+	
+	case EIntersection::AABB:
+		UShapeDrawUtility::Box(WorldContext, Location, Min, Max, Color);
+		break;
+
+	case EIntersection::Triangle:
+		UShapeDrawUtility::Triangle(WorldContext, GetActorTransform(), V0, V1, V2, Color);
+		break;
+
+	case EIntersection::Ray:
+		UShapeDrawUtility::Ray(WorldContext, GetActorLocation(), GetActorForwardVector(), Color);
+		break;		
+	}
+}
+
+void AHeroCharacter::Jump()
+{
+	Super::Jump();
+	
+}
+
 void AHeroCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController())) //TODO: Cast? Temporary pointer, freed up instantly.
 	{
+		const auto SubSystem = GetWorld()->GetSubsystem<UIntersectionSubsystem>();
+		SubSystem->RegisterPlayerController(PlayerController);
+		SubSystem->SetPlayerCharacter(this);
+		
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			Subsystem->AddMappingContext(HeroMappingContext, 0);
@@ -68,7 +113,7 @@ void AHeroCharacter::StartUseAbility(const FInputActionValue& Value)
 	const bool CurrentValue = Value.Get<bool>();
 	if (CurrentValue)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Ability usage triggered"));
+		UE_LOG(LogTemp, Warning, TEXT("ABILITY USED!"));
 	}
 }
 
@@ -80,11 +125,6 @@ void AHeroCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisValue.X);
 		AddControllerPitchInput(LookAxisValue.Y);
 	}
-}
-
-void AHeroCharacter::Jump()
-{
-	Super::Jump();
 }
 
 // Called every frame

@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "PlayerEntity.h"
 #include "DrawDebugHelpers.h"
+#include "IntersectionSubsystem.h"
+#include "ShapeDrawUtility.h"
 #include "Constants.h"
 
 
@@ -38,7 +40,48 @@ void APlayerEntity::Tick(float DeltaTime)
 		);
 }
 
-	bool APlayerEntity::ShouldTickIfViewportsOnly() const
+void APlayerEntity::BeginPlay()
+{
+	Super::BeginPlay();
+
+	const auto SubSystem = GetWorld()->GetSubsystem<UIntersectionSubsystem>();
+	SubSystem->RegisterDemonstrator(this);
+}
+
+void APlayerEntity::DrawShape(const FColor Color)
+{
+	if(Drawn) return;
+	
+	Drawn = true;
+
+	const auto Location = GetActorLocation();
+	const auto WorldContext = GetWorld();
+	
+	switch(IntersectionType.GetValue())
+	{
+	case EIntersection::Sphere:
+		UShapeDrawUtility::Sphere(WorldContext, Location, Radius, Color);
+		break;
+
+	case EIntersection::Plane:
+		UShapeDrawUtility::Plane(WorldContext, Location, GetActorUpVector(), GetActorQuat(), Color);
+		break;
+	
+	case EIntersection::AABB:
+		UShapeDrawUtility::Box(WorldContext, Location, Min, Max, Color);
+		break;
+
+	case EIntersection::Triangle:
+		UShapeDrawUtility::Triangle(WorldContext, GetActorTransform(), V0, V1, V2, Color);
+		break;
+
+	case EIntersection::Ray:
+		UShapeDrawUtility::Ray(WorldContext, GetActorLocation(), GetActorForwardVector(), Color);
+		break;		
+	}
+}
+
+bool APlayerEntity::ShouldTickIfViewportsOnly() const
 	{
 		return true;
 	}

@@ -4,6 +4,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "CollisionShape.h"
+#include "Intersections.h"
 #include "HeroCharacter.generated.h"
 
 class USpringArmComponent;
@@ -59,7 +61,33 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TEnumAsByte<EIntersection> IntersectionType;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Sphere")
+	float Radius = 500.f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="AABB", meta = (MakeEditWidget = true))
+	FVector Min;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="AABB", meta = (MakeEditWidget = true))
+	FVector Max;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Triangle", meta = (MakeEditWidget = true))
+	FVector V0;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Triangle", meta = (MakeEditWidget = true))
+	FVector V1;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Triangle", meta = (MakeEditWidget = true))
+	FVector V2;
+
+	UPROPERTY()
+	bool Drawn;
+	
+	void DrawShape(const FColor Color);
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="State", meta=(UIMin=0,UIMax=100))
 	float Health;
