@@ -43,22 +43,4 @@ void APlayerEntity::Tick(float DeltaTime)
 		return true;
 	}
 
-void APlayerEntity::Attack()
-{
-	switch (SpellType)
-	{
-	case ESpellTypes::Attacking:
-		break;
-	case ESpellTypes::Cooldown:
-		break;
-	case ESpellTypes::Melee:
-		break;
-	case ESpellTypes::Ranged:
-		break;
-	case ESpellTypes::Instant:
-		break;
-		
-	}
-}
-
 

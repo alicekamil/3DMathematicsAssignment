@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Entity.h"
-#include "SpellTypes.h"
 #include "PlayerEntity.generated.h"
 
 UCLASS()
@@ -23,9 +22,6 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="State", meta=(UIMin=0,UIMax=100))
 	float Health;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="SpellState", meta=(Bitmask, BitmaskEnum = "ESpellTypes"))
-	uint8 SpellState;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="State", meta=(Bitmask, BitmaskEnum = "ERelativeContext"))
 	int32 Context;
@@ -35,8 +31,5 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Context")
 	bool DrawArc;
-
-	UFUNCTION(BlueprintCallable)
-	void Attack();
 	
 };
