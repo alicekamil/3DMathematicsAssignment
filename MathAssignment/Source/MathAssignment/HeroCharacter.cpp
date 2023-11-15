@@ -8,6 +8,7 @@
 #include "Camera/CameraComponent.h"
 #include "EnhancedInputComponent.h"
 #include "IntersectionSubsystem.h"
+#include "AbilityComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
@@ -20,10 +21,6 @@ AHeroCharacter::AHeroCharacter()
 	bUseControllerRotationRoll = false;
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
-	//GetCharacterMovement()->RotationRate = FRotator()
-	
-	//SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMesh"));
-	//SkeletalMeshComponent->SetupAttachment(GetRootComponent());
 
 	CameraCrane = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraCrane"));
 	CameraCrane->SetupAttachment(RootComponent);
@@ -33,6 +30,8 @@ AHeroCharacter::AHeroCharacter()
 	ViewCamera->SetupAttachment(CameraCrane);
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
+
+	AbilityComponent = CreateDefaultSubobject<UAbilityComponent>(TEXT("AbilityComponent"));
 
 }
 
@@ -72,7 +71,6 @@ void AHeroCharacter::DrawShape(const FColor Color)
 void AHeroCharacter::Jump()
 {
 	Super::Jump();
-	
 }
 
 void AHeroCharacter::BeginPlay()
@@ -92,6 +90,17 @@ void AHeroCharacter::BeginPlay()
 	}
 }
 
+void AHeroCharacter::GetAbilityContexts(TArray<AAbility*> Abilities)
+{
+	int i = 0;
+	for(auto ability : Abilities)
+	{
+		int32 abilityContext = Abilities[i]->Context;
+		abilityContexts.Add(abilityContext);
+		i++;
+	}
+}
+
 void AHeroCharacter::Move(const FInputActionValue& Value)
 {
 	//ActionState != EActionState::EAS_Unoccupied) return;
@@ -108,12 +117,15 @@ void AHeroCharacter::Move(const FInputActionValue& Value)
 	AddMovementInput(RightDirection, MovementVector.X);
 }
 
-void AHeroCharacter::StartUseAbility(const FInputActionValue& Value)
+void AHeroCharacter::StartAbility1(const FInputActionValue& Value)
 {
 	const bool CurrentValue = Value.Get<bool>();
 	if (CurrentValue)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("ABILITY USED!"));
+		AbilityComponent->StartAbility();
+		UE_LOG(LogTemp, Warning, TEXT("Ability1 input!"));
+		
+		
 	}
 }
 
@@ -142,7 +154,7 @@ void AHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AHeroCharacter::Move);
-		EnhancedInputComponent->BindAction(UseAbilityAction, ETriggerEvent::Started, this, &AHeroCharacter::StartUseAbility);//TODO: Started/Triggered?
+		EnhancedInputComponent->BindAction(UseAoEAction, ETriggerEvent::Started, this, &AHeroCharacter::StartAbility1);//TODO: Started/Triggered?
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AHeroCharacter::Look);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AHeroCharacter::Jump);
 		

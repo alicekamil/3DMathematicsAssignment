@@ -10,30 +10,25 @@ void UIntersectionSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 
 	
 }
+//keep track of conditions
 
 void UIntersectionSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 {
 	Super::OnWorldBeginPlay(InWorld);
-
-	/*Player = Cast<AHeroCharacter>(Player);
-	if (Player)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Player exists in subsystem!"));
-	}
-	*/
 	
 }
 
 void UIntersectionSubsystem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
 	
 	
 	for(const auto Demonstrator : IntersectionDemonstrators)
 	{
 		Demonstrator->Drawn = false;
 	}
-
+	
 	Player->Drawn = false;
 	
 	if(IntersectionDemonstrators.Num() == 1)
@@ -47,11 +42,13 @@ void UIntersectionSubsystem::Tick(float DeltaTime)
 		for(const auto Demonstrator : IntersectionDemonstrators)
 		{
 			auto IntersectionTest = false;
-
+			CurrentContext = UContextHelpers::GetRelativeContext(Player, Demonstrator);
+			if(UContextHelpers::ContextPredicate(CurrentContext, ))
 			// Perform the intersection test between Player and Demonstrator
 			if(Player->IntersectionType == EIntersection::Sphere &&
 				Demonstrator->IntersectionType == EIntersection::Sphere)
 			{
+				//
 				auto ContactPoint = FVector();
 				
 				IntersectionTest = UIntersectionUtility::SphereSphere(

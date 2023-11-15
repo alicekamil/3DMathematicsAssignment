@@ -1,6 +1,8 @@
 
 #pragma once
 
+//Input
+
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
@@ -10,6 +12,7 @@
 
 class USpringArmComponent;
 class UCameraComponent;
+class UAbilityComponent;
 class UInputMappingContext;
 class UInputAction;
 
@@ -25,6 +28,11 @@ public:
 	virtual void Jump() override;
 
 private:
+
+	TArray<int32> abilityContexts;
+
+	UPROPERTY(VisibleAnywhere)
+	UAbilityComponent* AbilityComponent;
 	
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* CameraCrane;
@@ -34,9 +42,6 @@ private:
 	
 protected:
 
-	//UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category="Base")
-	//USkeletalMeshComponent* SkeletalMeshComponent;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputMappingContext* HeroMappingContext;
 
@@ -44,7 +49,7 @@ protected:
 	UInputAction* MoveAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
-	UInputAction* UseAbilityAction;
+	UInputAction* UseAoEAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputAction* LookAction;
@@ -54,7 +59,7 @@ protected:
 
 	void Move(const FInputActionValue& Value);
 
-	void StartUseAbility(const FInputActionValue& Value);
+	void StartAbility1(const FInputActionValue& Value);
 
 	void Look(const FInputActionValue& Value);
 	
@@ -62,6 +67,8 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+
+	void GetAbilityContexts(TArray<AAbility*> Abilities);
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TEnumAsByte<EIntersection> IntersectionType;
@@ -100,6 +107,11 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Context")
 	bool DrawArc;
+
+	bool IsFalling;
+	
+	UPROPERTY(BlueprintReadOnly, Category = Spells)
+	bool IsCurrentlyPlayingSpell = false;
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/WorldSubsystem.h"
+#include "ContextHelpers.h"
 #include "IntersectionSubsystem.generated.h"
 
 class AHeroCharacter;
@@ -15,6 +16,9 @@ class MATHASSIGNMENT_API UIntersectionSubsystem
 	GENERATED_BODY()
 
 	UPROPERTY()
+	int32 CurrentContext;
+	
+	UPROPERTY()
 	TArray<APlayerEntity*> IntersectionDemonstrators;
 
 	UPROPERTY()
@@ -22,6 +26,8 @@ class MATHASSIGNMENT_API UIntersectionSubsystem
 
 	UPROPERTY()
 	AHeroCharacter* Player;
+
+	
 	
 public:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;

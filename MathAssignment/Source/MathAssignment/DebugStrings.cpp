@@ -1,9 +1,11 @@
 #include "DebugStrings.h"
 
 #include "PlayerEntity.h"
-#include "MathAssignment/ContextHelpers.h"
+#include "ContextHelpers.h"
 #include "Engine/Canvas.h"
 
+//conditional checks between character and enemy(on the ability component)
+//
 void FDebugTextDelegateHelper::DrawDebugLabels(UCanvas* Canvas, APlayerController* PlayerController)
 {
 	if(!Canvas)
