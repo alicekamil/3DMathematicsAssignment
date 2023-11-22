@@ -15,11 +15,9 @@ class MATHASSIGNMENT_API UIntersectionSubsystem
 {
 	GENERATED_BODY()
 
-	UPROPERTY()
-	int32 CurrentContext;
 	
 	UPROPERTY()
-	TArray<APlayerEntity*> IntersectionDemonstrators;
+	TArray<APlayerEntity*> Enemies;
 
 	UPROPERTY()
 	APlayerController* PlayerControllerInstance;
@@ -27,9 +25,15 @@ class MATHASSIGNMENT_API UIntersectionSubsystem
 	UPROPERTY()
 	AHeroCharacter* Player;
 
+	TArray<int32> abilityContexts;
+
 	
 	
 public:
+
+	UPROPERTY()
+	int32 CurrentContext;
+	
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Tick(float DeltaTime) override;
 	virtual void OnWorldBeginPlay(UWorld& InWorld) override;
@@ -37,8 +41,8 @@ public:
 	void RegisterPlayerController(APlayerController* PlayerController);
 	void SetPlayerCharacter(AHeroCharacter* PlayerCharacter);
 	
-	void RegisterDemonstrator(APlayerEntity* Demonstrator);
-	void UnregisterDemonstrator(APlayerEntity* Demonstrator);
+	void RegisterEnemy(APlayerEntity* Enemy);
+	void UnregisterEnemy(APlayerEntity* Enemy);
 
 	virtual TStatId GetStatId() const override;
 };

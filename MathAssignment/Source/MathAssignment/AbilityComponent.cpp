@@ -1,5 +1,8 @@
 #include "AbilityComponent.h"
 #include "ContextHelpers.h"
+#include "IntersectionSubSystem.h"
+#include "Engine/GameInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 
 UAbilityComponent::UAbilityComponent()
@@ -20,7 +23,9 @@ void UAbilityComponent::BeginPlay()
 		Abilities.Add(ability);
 		ability->SetOwner(GetOwner());
 	}
-	Player->GetAbilityContexts(Abilities);
+	GetAbilityContexts(Abilities);
+	
+	
 }
 
 void UAbilityComponent::TickComponent(float DeltaTime, ELevelTick TickType,
@@ -28,6 +33,17 @@ void UAbilityComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+}
+
+void UAbilityComponent::GetAbilityContexts(TArray<AAbility*> ContextAbilities) 
+{
+	int i = 0;
+	for(auto ability : ContextAbilities)
+	{
+		int32 abilityContext = ContextAbilities[i]->Context;
+		abilityContexts.Add(abilityContext); //Store a list of all the abilities contexts 
+		i++;
+	}
 }
 
 bool UAbilityComponent::IsAnyAbilityBeingUsed()
@@ -45,8 +61,6 @@ bool UAbilityComponent::IsAnyAbilityBeingUsed()
 //If _Any_ of the abilites has an active cast timer
 bool UAbilityComponent::GetCanUseAbility()
 {
-	//if(Player->IsJumping)
-		//return false;
 	
 	if(IsAnyAbilityBeingUsed())
 	{
@@ -56,15 +70,19 @@ bool UAbilityComponent::GetCanUseAbility()
 	
 }
 
-void UAbilityComponent::StartAbility()
+void UAbilityComponent::StartAbility(int index)
 {
 	if(!GetCanUseAbility())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Cant use ability!"));
 		return;
 	}
-	Abilities[0]->TryCast();
-	UE_LOG(LogTemp, Warning, TEXT("Called trycast"));
+	if(UContextHelpers::ContextPredicate(Player->SubSystem->CurrentContext, Abilities[index]->Context))
+	{
+		Abilities[index]->TryCast();
+		UE_LOG(LogTemp, Warning, TEXT("Called trycast"));
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Failed"));
 	//
 }
 

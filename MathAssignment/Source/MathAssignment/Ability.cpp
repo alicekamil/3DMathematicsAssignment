@@ -13,6 +13,7 @@ AAbility::AAbility()
 	PrimaryActorTick.bCanEverTick = true;
 }
 
+//
 
 bool AAbility::IsBeingUsed()
 {

@@ -4,13 +4,14 @@
 #include "HeroCharacter.h"
 #include "IntersectionUtility.h"
 
+//Some form of target selection
+
 void UIntersectionSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 
 	
 }
-//keep track of conditions
 
 void UIntersectionSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 {
@@ -18,32 +19,36 @@ void UIntersectionSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 	
 }
 
+
+
 void UIntersectionSubsystem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 	
 	
-	for(const auto Demonstrator : IntersectionDemonstrators)
+	for(const auto Enemy : Enemies)
 	{
-		Demonstrator->Drawn = false;
+		Enemy->Drawn = false;
 	}
 	
 	Player->Drawn = false;
 	
-	if(IntersectionDemonstrators.Num() == 1)
+	if(Enemies.Num() == 1)
 	{
-		IntersectionDemonstrators[0]->DrawShape(FColor::Green);
+		Enemies[0]->DrawShape(FColor::Green);
 		return;
 	}	
 
 	if (Player)
 	{
-		for(const auto Demonstrator : IntersectionDemonstrators)
+		for(const auto Demonstrator : Enemies)
 		{
 			auto IntersectionTest = false;
-			CurrentContext = UContextHelpers::GetRelativeContext(Player, Demonstrator);
-			if(UContextHelpers::ContextPredicate(CurrentContext, ))
+			CurrentContext = UContextHelpers::GetRelativeContext(Player, Demonstrator); //get the context between each other
+
+			
+			//if(UContextHelpers::ContextPredicate(CurrentContext, ))
 			// Perform the intersection test between Player and Demonstrator
 			if(Player->IntersectionType == EIntersection::Sphere &&
 				Demonstrator->IntersectionType == EIntersection::Sphere)
@@ -234,7 +239,7 @@ void UIntersectionSubsystem::Tick(float DeltaTime)
 		}
 	}
 
-	for(const auto Demonstrator : IntersectionDemonstrators)
+	for(const auto Demonstrator : Enemies)
 	{
 		bool bOnScreen;
 		
@@ -289,16 +294,16 @@ void UIntersectionSubsystem::SetPlayerCharacter(AHeroCharacter* PlayerCharacter)
 	Player = PlayerCharacter;
 }
 
-void UIntersectionSubsystem::RegisterDemonstrator(APlayerEntity* Demonstrator)
+void UIntersectionSubsystem::RegisterEnemy(APlayerEntity* Enemy)
 {
-	if(!IntersectionDemonstrators.Contains(Demonstrator))
-		IntersectionDemonstrators.Add(Demonstrator);
+	if(!Enemies.Contains(Enemy))
+		Enemies.Add(Enemy);
 }
 
-void UIntersectionSubsystem::UnregisterDemonstrator(APlayerEntity* Demonstrator)
+void UIntersectionSubsystem::UnregisterEnemy(APlayerEntity* Enemy)
 {
-	if(IntersectionDemonstrators.Contains(Demonstrator))
-		IntersectionDemonstrators.Remove(Demonstrator);
+	if(Enemies.Contains(Enemy))
+		Enemies.Remove(Enemy);
 }
 
 TStatId UIntersectionSubsystem::GetStatId() const

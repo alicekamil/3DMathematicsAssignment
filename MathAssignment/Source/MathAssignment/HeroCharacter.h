@@ -1,18 +1,19 @@
 
 #pragma once
 
-//Input
-
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
 #include "CollisionShape.h"
 #include "Intersections.h"
+#include "IntersectionSubSystem.h"
 #include "HeroCharacter.generated.h"
 
+class AAbility;
 class USpringArmComponent;
 class UCameraComponent;
 class UAbilityComponent;
+class UIntersectionSubsystem;
 class UInputMappingContext;
 class UInputAction;
 
@@ -27,9 +28,12 @@ public:
 
 	virtual void Jump() override;
 
-private:
+	UPROPERTY()
+	UIntersectionSubsystem* SubSystem;
 
-	TArray<int32> abilityContexts;
+	
+
+private:
 
 	UPROPERTY(VisibleAnywhere)
 	UAbilityComponent* AbilityComponent;
@@ -39,8 +43,12 @@ private:
 	
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* ViewCamera;
+
+	float targetArmLength;
 	
 protected:
+
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputMappingContext* HeroMappingContext;
@@ -49,17 +57,28 @@ protected:
 	UInputAction* MoveAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
-	UInputAction* UseAoEAction;
+	UInputAction* UseAbilityOneAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UInputAction* UseAbilityTwoAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UInputAction* UseAbilityThreeAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputAction* LookAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputAction* JumpAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Camera")
+	UInputAction* CamZoomInAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Camera")
+	UInputAction* CamZoomOutAction;
 
 	void Move(const FInputActionValue& Value);
 
 	void StartAbility1(const FInputActionValue& Value);
+	void StartAbility2(const FInputActionValue& Value);
+	void StartAbility3(const FInputActionValue& Value);
 
 	void Look(const FInputActionValue& Value);
 	
@@ -67,8 +86,6 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-
-	void GetAbilityContexts(TArray<AAbility*> Abilities);
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TEnumAsByte<EIntersection> IntersectionType;
@@ -95,6 +112,14 @@ public:
 	bool Drawn;
 	
 	void DrawShape(const FColor Color);
+
+	void CameraZoomIn();
+
+	void CameraZoomOut();
+
+	float desiredCamDistance = 2400.f;
+	float zoomMin = 300.f;
+	float zoomMax = 2500.f;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="State", meta=(UIMin=0,UIMax=100))
 	float Health;

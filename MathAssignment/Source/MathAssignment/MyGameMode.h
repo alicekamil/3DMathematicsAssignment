@@ -4,14 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameMode.h"
-#include "TestGameMode.generated.h"
+#include "MyGameMode.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
-class MATHASSIGNMENT_API ATestGameMode : public AGameMode
+class MATHASSIGNMENT_API AMyGameMode : public AGameMode
 {
 	GENERATED_BODY()
-	
 };

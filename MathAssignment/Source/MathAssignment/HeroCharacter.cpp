@@ -24,7 +24,8 @@ AHeroCharacter::AHeroCharacter()
 
 	CameraCrane = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraCrane"));
 	CameraCrane->SetupAttachment(RootComponent);
-	CameraCrane->TargetArmLength = 2400.f;
+	targetArmLength = CameraCrane->TargetArmLength;
+	targetArmLength = 2400.f;
 
 	ViewCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	ViewCamera->SetupAttachment(CameraCrane);
@@ -68,6 +69,23 @@ void AHeroCharacter::DrawShape(const FColor Color)
 	}
 }
 
+void AHeroCharacter::CameraZoomIn()
+{
+	//if right click is not held return
+	
+	targetArmLength = FMath::Clamp((targetArmLength + 200.f), zoomMin, zoomMax);
+	CameraCrane->TargetArmLength = targetArmLength;
+}
+
+void AHeroCharacter::CameraZoomOut()
+{
+	//if right click is not held return
+	//float value = desiredCamDistance - 200.f;
+	//desiredCamDistance = FMath::Clamp(value, zoomMin, zoomMax);
+	targetArmLength = FMath::Clamp((targetArmLength - 200.f), zoomMin, zoomMax);
+	CameraCrane->TargetArmLength = targetArmLength;
+}
+
 void AHeroCharacter::Jump()
 {
 	Super::Jump();
@@ -79,7 +97,10 @@ void AHeroCharacter::BeginPlay()
 
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController())) //TODO: Cast? Temporary pointer, freed up instantly.
 	{
-		const auto SubSystem = GetWorld()->GetSubsystem<UIntersectionSubsystem>();
+		PlayerController->SetShowMouseCursor(true);
+		
+		//const auto
+		SubSystem = GetWorld()->GetSubsystem<UIntersectionSubsystem>();
 		SubSystem->RegisterPlayerController(PlayerController);
 		SubSystem->SetPlayerCharacter(this);
 		
@@ -90,16 +111,6 @@ void AHeroCharacter::BeginPlay()
 	}
 }
 
-void AHeroCharacter::GetAbilityContexts(TArray<AAbility*> Abilities)
-{
-	int i = 0;
-	for(auto ability : Abilities)
-	{
-		int32 abilityContext = Abilities[i]->Context;
-		abilityContexts.Add(abilityContext);
-		i++;
-	}
-}
 
 void AHeroCharacter::Move(const FInputActionValue& Value)
 {
@@ -122,10 +133,28 @@ void AHeroCharacter::StartAbility1(const FInputActionValue& Value)
 	const bool CurrentValue = Value.Get<bool>();
 	if (CurrentValue)
 	{
-		AbilityComponent->StartAbility();
-		UE_LOG(LogTemp, Warning, TEXT("Ability1 input!"));
-		
-		
+		UE_LOG(LogTemp, Warning, TEXT("Pressed Q!"));
+		AbilityComponent->StartAbility(0);
+	}
+}
+
+void AHeroCharacter::StartAbility2(const FInputActionValue& Value)
+{
+	const bool CurrentValue = Value.Get<bool>();
+	if (CurrentValue)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Pressed E!"));
+		AbilityComponent->StartAbility(1);
+	}
+}
+
+void AHeroCharacter::StartAbility3(const FInputActionValue& Value)
+{
+	const bool CurrentValue = Value.Get<bool>();
+	if (CurrentValue)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Pressed C!"));
+		AbilityComponent->StartAbility(2);
 	}
 }
 
@@ -143,7 +172,7 @@ void AHeroCharacter::Look(const FInputActionValue& Value)
 void AHeroCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 }
 
 // Called to bind functionality to input
@@ -154,9 +183,13 @@ void AHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AHeroCharacter::Move);
-		EnhancedInputComponent->BindAction(UseAoEAction, ETriggerEvent::Started, this, &AHeroCharacter::StartAbility1);//TODO: Started/Triggered?
+		EnhancedInputComponent->BindAction(UseAbilityOneAction, ETriggerEvent::Started, this, &AHeroCharacter::StartAbility1);
+		EnhancedInputComponent->BindAction(UseAbilityTwoAction, ETriggerEvent::Started, this, &AHeroCharacter::StartAbility2);
+		EnhancedInputComponent->BindAction(UseAbilityThreeAction, ETriggerEvent::Started, this, &AHeroCharacter::StartAbility3);//TODO: Started/Triggered?
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AHeroCharacter::Look);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &AHeroCharacter::Jump);
+		EnhancedInputComponent->BindAction(CamZoomInAction, ETriggerEvent::Triggered, this, &AHeroCharacter::CameraZoomIn);
+		EnhancedInputComponent->BindAction(CamZoomOutAction, ETriggerEvent::Triggered, this, &AHeroCharacter::CameraZoomOut);
+		
 		
 	}
 

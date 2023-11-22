@@ -45,7 +45,7 @@ void APlayerEntity::BeginPlay()
 	Super::BeginPlay();
 
 	const auto SubSystem = GetWorld()->GetSubsystem<UIntersectionSubsystem>();
-	SubSystem->RegisterDemonstrator(this);
+	SubSystem->RegisterEnemy(this);
 }
 
 void APlayerEntity::DrawShape(const FColor Color)

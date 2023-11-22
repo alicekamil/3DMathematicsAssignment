@@ -5,6 +5,7 @@
 #include "HeroCharacter.h"
 #include "Ability.h"
 #include "AbilityTypes.h"
+#include "IntersectionSubSystem.h"
 #include "Components/ActorComponent.h"
 #include "AbilityComponent.generated.h"
 
@@ -29,10 +30,16 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	EAbilityTypes SelectedAbilityType;
 
+	TArray<int32> abilityContexts;
+	void GetAbilityContexts(TArray<AAbility*> ContextAbilities);
+
+	UPROPERTY()
+	UIntersectionSubsystem* SubSystem;
+	
+
 	bool IsAnyAbilityBeingUsed();
 	bool GetCanUseAbility();
-	void StartAbility();
-	void SpawnAbility();
+	void StartAbility(int index);
 	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 							   FActorComponentTickFunction* ThisTickFunction) override;
