@@ -2,8 +2,10 @@
 #include "PlayerEntity.h"
 #include "DrawDebugHelpers.h"
 #include "IntersectionSubsystem.h"
+#include "IntersectionUtility.h"
 #include "ShapeDrawUtility.h"
 #include "Constants.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -44,6 +46,8 @@ void APlayerEntity::BeginPlay()
 {
 	Super::BeginPlay();
 
+	//UPrimitiveComponent::SetRenderCustomDepth(2);
+
 	const auto SubSystem = GetWorld()->GetSubsystem<UIntersectionSubsystem>();
 	SubSystem->RegisterEnemy(this);
 }
@@ -53,7 +57,7 @@ void APlayerEntity::DrawShape(const FColor Color)
 	if(Drawn) return;
 	
 	Drawn = true;
-
+	
 	const auto Location = GetActorLocation();
 	const auto WorldContext = GetWorld();
 	
@@ -81,9 +85,41 @@ void APlayerEntity::DrawShape(const FColor Color)
 	}
 }
 
+void APlayerEntity::CheckInteresction()
+{
+	if (IntersectionType == AABB)
+	{
+		// Get the player controller
+		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+		if (!PlayerController)
+			return;
+
+		// Get the mouse position
+		float MouseX, MouseY;
+		PlayerController->GetMousePosition(MouseX, MouseY);
+
+		// Get the world location and direction from the mouse position
+		FVector WorldLocation, WorldDirection;
+		PlayerController->DeprojectScreenPositionToWorld(MouseX, MouseY, WorldLocation, WorldDirection);
+
+		// Perform the AABB-ray intersection
+		FVector ContactPoint;
+		bool bIntersects = UIntersectionUtility::RayAABB(WorldLocation, WorldDirection, Min, Max, ContactPoint);
+
+		// If there is an intersection, handle it (you can replace this with your logic)
+		if (bIntersects)
+		{
+			// Do something with the intersection
+			// For example, change the color, play a sound, etc.
+			UE_LOG(LogTemp, Warning, TEXT("AABB Intersection!"));
+		}
+	}
+}
+
 bool APlayerEntity::ShouldTickIfViewportsOnly() const
 	{
 		return true;
 	}
+
 
 

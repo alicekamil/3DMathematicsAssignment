@@ -31,7 +31,8 @@ public:
 	UPROPERTY()
 	UIntersectionSubsystem* SubSystem;
 
-	
+	UPROPERTY(VisibleAnywhere)
+	UCameraComponent* ViewCamera;
 
 private:
 
@@ -40,9 +41,6 @@ private:
 	
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* CameraCrane;
-	
-	UPROPERTY(VisibleAnywhere)
-	UCameraComponent* ViewCamera;
 
 	float targetArmLength;
 	

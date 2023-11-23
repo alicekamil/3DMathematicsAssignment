@@ -61,5 +61,6 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Context")
 	bool DrawArc;
-	
+
+	void CheckInteresction();
 };

@@ -6,7 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Entity.generated.h"
 
-UCLASS(hidecategories=(Collision, Rendering, HLOD, WorldPartition, DataLayers, Replication, Physics, Networking, Actor, LevelInstance, Cooking))
+UCLASS()
+//hidecategories=(Collision, HLOD, WorldPartition, Replication, Physics, LevelInstance, Cooking))
 class MATHASSIGNMENT_API AEntity : public AActor
 {
 	GENERATED_BODY()
@@ -14,8 +15,6 @@ class MATHASSIGNMENT_API AEntity : public AActor
 public:
 	// Sets default values for this actor's properties
 	AEntity();
-
-protected:
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category="Base")
 	UStaticMeshComponent* StaticMeshComponent;

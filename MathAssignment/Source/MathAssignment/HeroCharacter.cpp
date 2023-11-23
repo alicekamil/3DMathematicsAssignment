@@ -41,6 +41,7 @@ void AHeroCharacter::DrawShape(const FColor Color)
 	if(Drawn) return;
 	
 	Drawn = true;
+	
 
 	const auto Location = GetActorLocation();
 	const auto WorldContext = GetWorld();

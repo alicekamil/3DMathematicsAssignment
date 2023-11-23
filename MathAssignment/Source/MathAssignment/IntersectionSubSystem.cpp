@@ -20,7 +20,6 @@ void UIntersectionSubsystem::OnWorldBeginPlay(UWorld& InWorld)
 }
 
 
-
 void UIntersectionSubsystem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -42,10 +41,45 @@ void UIntersectionSubsystem::Tick(float DeltaTime)
 
 	if (Player)
 	{
+		// Get the mouse position
+		float MouseX,MouseY;
+		PlayerControllerInstance->GetMousePosition(MouseX, MouseY);
+
+		//cursor from screen to world position
+		// Get the world location and direction from the mouse position
+		FVector WorldLocation, WorldDirection;
+		PlayerControllerInstance->DeprojectMousePositionToWorld(WorldLocation, WorldDirection);
+		
+
+		// Define the ray parameters
+		FVector RayOrigin = WorldLocation;
+		//APlayerCameraManager *camManager = GetWorld()->GetFirstPlayerController()->PlayerCameraManager;
+		//FVector camLocation = camManager->GetCameraLocation();
+		//FVector camForward  = camManager->GetCameraRotation().Vector();
+		//FVector RayOrigin = camLocation;
+		FVector RayDirection = WorldDirection;
+		//FVector RayDirection = camForward.GetSafeNormal();
+		
 		for(const auto Demonstrator : Enemies)
 		{
 			auto IntersectionTest = false;
 			CurrentContext = UContextHelpers::GetRelativeContext(Player, Demonstrator); //get the context between each other
+
+			FVector Min = Demonstrator->Min + Demonstrator->GetActorLocation();
+			FVector Max = Demonstrator->Max + Demonstrator->GetActorLocation();
+			
+			FVector TestContactPoint;
+
+			if(UIntersectionUtility::RayAABB(RayOrigin, RayDirection, Min, Max, TestContactPoint))
+			{
+				Demonstrator->StaticMeshComponent->SetCustomDepthStencilValue(3);
+				UE_LOG(LogTemp, Warning, TEXT("Rayabb intersect"));
+			}
+			else
+			{
+				Demonstrator->StaticMeshComponent->SetCustomDepthStencilValue(2);
+				UE_LOG(LogTemp, Warning, TEXT("Rayabb  dont intersect"));
+			}
 
 			
 			//if(UContextHelpers::ContextPredicate(CurrentContext, ))
