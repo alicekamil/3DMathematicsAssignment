@@ -73,12 +73,10 @@ void UIntersectionSubsystem::Tick(float DeltaTime)
 			if(UIntersectionUtility::RayAABB(RayOrigin, RayDirection, Min, Max, TestContactPoint))
 			{
 				Demonstrator->StaticMeshComponent->SetCustomDepthStencilValue(3);
-				UE_LOG(LogTemp, Warning, TEXT("Rayabb intersect"));
 			}
 			else
 			{
-				Demonstrator->StaticMeshComponent->SetCustomDepthStencilValue(2);
-				UE_LOG(LogTemp, Warning, TEXT("Rayabb  dont intersect"));
+				Demonstrator->StaticMeshComponent->SetCustomDepthStencilValue(1);
 			}
 
 			
@@ -105,7 +103,9 @@ void UIntersectionSubsystem::Tick(float DeltaTime)
 						ContactPoint,
 						25.f,
 						FColor::Cyan
-						);		
+						);
+					Demonstrator->StaticMeshComponent->SetCustomDepthStencilValue(0);
+					Player->GetMesh()->SetCustomDepthStencilValue(253);
 				}
 			}
 

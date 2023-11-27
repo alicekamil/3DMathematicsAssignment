@@ -33,7 +33,7 @@ AHeroCharacter::AHeroCharacter()
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
 	AbilityComponent = CreateDefaultSubobject<UAbilityComponent>(TEXT("AbilityComponent"));
-
+	
 }
 
 void AHeroCharacter::DrawShape(const FColor Color)
@@ -110,6 +110,8 @@ void AHeroCharacter::BeginPlay()
 			Subsystem->AddMappingContext(HeroMappingContext, 0);
 		}
 	}
+	GetMesh()->SetRenderCustomDepth(true);
+	GetMesh()->SetCustomDepthStencilValue(1);
 }
 
 
@@ -135,6 +137,7 @@ void AHeroCharacter::StartAbility1(const FInputActionValue& Value)
 	if (CurrentValue)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Pressed Q!"));
+		GetMesh()->SetCustomDepthStencilValue(5);
 		AbilityComponent->StartAbility(0);
 	}
 }
@@ -155,6 +158,7 @@ void AHeroCharacter::StartAbility3(const FInputActionValue& Value)
 	if (CurrentValue)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Pressed C!"));
+		GetMesh()->SetCustomDepthStencilValue(0);
 		AbilityComponent->StartAbility(2);
 	}
 }
