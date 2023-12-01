@@ -18,6 +18,9 @@ class MATHASSIGNMENT_API UAbilityComponent : public UActorComponent
 
 	UPROPERTY()
 	TArray<AAbility*> Abilities;
+
+	UPROPERTY()
+	AAbility* currAbility;
 	
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<AAbility>> AbilityTypes;

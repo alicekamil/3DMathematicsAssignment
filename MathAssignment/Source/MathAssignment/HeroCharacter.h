@@ -9,7 +9,7 @@
 #include "IntersectionSubSystem.h"
 #include "HeroCharacter.generated.h"
 
-class AAbility;
+//class AAbility;
 class USpringArmComponent;
 class UCameraComponent;
 class UAbilityComponent;
@@ -34,6 +34,9 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* ViewCamera;
 
+	UFUNCTION()
+	UAbilityComponent* GetAbilityComponent();
+
 private:
 
 	UPROPERTY(VisibleAnywhere)
@@ -45,8 +48,6 @@ private:
 	float targetArmLength;
 	
 protected:
-
-	
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputMappingContext* HeroMappingContext;
@@ -77,6 +78,7 @@ protected:
 	void StartAbility1(const FInputActionValue& Value);
 	void StartAbility2(const FInputActionValue& Value);
 	void StartAbility3(const FInputActionValue& Value);
+	
 
 	void Look(const FInputActionValue& Value);
 	

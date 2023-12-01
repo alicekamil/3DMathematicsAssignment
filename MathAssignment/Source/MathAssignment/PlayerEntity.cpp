@@ -13,7 +13,6 @@ APlayerEntity::APlayerEntity()
 {
 	
 	PrimaryActorTick.bCanEverTick = true;
-	PrimaryActorTick.bStartWithTickEnabled = true;
 }
 
 
@@ -116,10 +115,6 @@ void APlayerEntity::CheckInteresction()
 	}
 }
 
-bool APlayerEntity::ShouldTickIfViewportsOnly() const
-	{
-		return true;
-	}
 
 
 

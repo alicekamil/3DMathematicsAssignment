@@ -36,6 +36,8 @@ AHeroCharacter::AHeroCharacter()
 	
 }
 
+
+
 void AHeroCharacter::DrawShape(const FColor Color)
 {
 	if(Drawn) return;
@@ -92,6 +94,11 @@ void AHeroCharacter::Jump()
 	Super::Jump();
 }
 
+UAbilityComponent* AHeroCharacter::GetAbilityComponent()
+{
+	return AbilityComponent;
+}
+
 void AHeroCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -102,8 +109,12 @@ void AHeroCharacter::BeginPlay()
 		
 		//const auto
 		SubSystem = GetWorld()->GetSubsystem<UIntersectionSubsystem>();
-		SubSystem->RegisterPlayerController(PlayerController);
-		SubSystem->SetPlayerCharacter(this);
+		if(SubSystem)
+		{
+			SubSystem->RegisterPlayerController(PlayerController);
+			SubSystem->SetPlayerCharacter(this);
+		}
+		
 		
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
@@ -137,7 +148,7 @@ void AHeroCharacter::StartAbility1(const FInputActionValue& Value)
 	if (CurrentValue)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Pressed Q!"));
-		GetMesh()->SetCustomDepthStencilValue(5);
+		//GetMesh()->SetCustomDepthStencilValue(5);
 		AbilityComponent->StartAbility(0);
 	}
 }
@@ -158,7 +169,7 @@ void AHeroCharacter::StartAbility3(const FInputActionValue& Value)
 	if (CurrentValue)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Pressed C!"));
-		GetMesh()->SetCustomDepthStencilValue(0);
+		//GetMesh()->SetCustomDepthStencilValue(0);
 		AbilityComponent->StartAbility(2);
 	}
 }

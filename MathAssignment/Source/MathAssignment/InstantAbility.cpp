@@ -17,9 +17,9 @@ void AInstantAbility::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AInstantAbility::Cast()
+void AInstantAbility::CastAbility()
 {
-	Super::Cast();
+	Super::CastAbility();
 	
 	
 	

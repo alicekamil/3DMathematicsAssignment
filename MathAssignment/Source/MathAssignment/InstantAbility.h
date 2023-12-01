@@ -18,5 +18,5 @@ protected:
 
 public:
 	virtual void Tick(float DeltaTime) override;
-	virtual void Cast() override;
+	virtual void CastAbility() override;
 };

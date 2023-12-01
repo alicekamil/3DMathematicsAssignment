@@ -22,7 +22,6 @@ public:
 
 	virtual void BeginPlay() override;
 	
-	virtual bool ShouldTickIfViewportsOnly() const override;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TEnumAsByte<EIntersection> IntersectionType;

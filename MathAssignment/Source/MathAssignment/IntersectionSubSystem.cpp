@@ -9,22 +9,12 @@
 void UIntersectionSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
-
 	
 }
-
-void UIntersectionSubsystem::OnWorldBeginPlay(UWorld& InWorld)
-{
-	Super::OnWorldBeginPlay(InWorld);
-	
-}
-
 
 void UIntersectionSubsystem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	
 	
 	for(const auto Enemy : Enemies)
 	{
@@ -63,7 +53,7 @@ void UIntersectionSubsystem::Tick(float DeltaTime)
 		for(const auto Demonstrator : Enemies)
 		{
 			auto IntersectionTest = false;
-			CurrentContext = UContextHelpers::GetRelativeContext(Player, Demonstrator); //get the context between each other
+			CurrentContext = UContextHelpers::GetRelativeContext(Player, Demonstrator); 
 
 			FVector Min = Demonstrator->Min + Demonstrator->GetActorLocation();
 			FVector Max = Demonstrator->Max + Demonstrator->GetActorLocation();

@@ -17,15 +17,13 @@ void UAbilityComponent::BeginPlay()
 
 	Player = Cast<AHeroCharacter>(GetOwner());
 
-	for (TSubclassOf<AAbility> abilityType : AbilityTypes) // 
+	for (TSubclassOf<AAbility> abilityType : AbilityTypes)
 	{
 		AAbility* ability = GetWorld()->SpawnActor<AAbility>(abilityType, FVector::Zero(), FRotator::ZeroRotator);
 		Abilities.Add(ability);
 		ability->SetOwner(GetOwner());
 	}
 	GetAbilityContexts(Abilities);
-	
-	
 }
 
 void UAbilityComponent::TickComponent(float DeltaTime, ELevelTick TickType,
@@ -61,13 +59,11 @@ bool UAbilityComponent::IsAnyAbilityBeingUsed()
 //If _Any_ of the abilites has an active cast timer
 bool UAbilityComponent::GetCanUseAbility()
 {
-	
 	if(IsAnyAbilityBeingUsed())
 	{
 		return false;
 	}
 	return true;
-	
 }
 
 void UAbilityComponent::StartAbility(int index)
@@ -79,12 +75,11 @@ void UAbilityComponent::StartAbility(int index)
 	}
 	if(UContextHelpers::ContextPredicate(Player->SubSystem->CurrentContext, Abilities[index]->Context))
 	{
+		currAbility = Abilities[index];
 		Abilities[index]->TryCast();
+		
 		UE_LOG(LogTemp, Warning, TEXT("Called trycast"));
 	}
 	UE_LOG(LogTemp, Warning, TEXT("Failed"));
-	//
 }
 
-
-// Check if the bitmask to cast AoE = players current context bitmask

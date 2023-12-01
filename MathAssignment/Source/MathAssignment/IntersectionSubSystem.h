@@ -36,7 +36,6 @@ public:
 	
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Tick(float DeltaTime) override;
-	virtual void OnWorldBeginPlay(UWorld& InWorld) override;
 	void RegisterPlayerController(APlayerController* PlayerController);
 	void SetPlayerCharacter(AHeroCharacter* PlayerCharacter);
 	

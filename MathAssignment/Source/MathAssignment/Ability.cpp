@@ -1,19 +1,31 @@
 
 #include "Ability.h"
+#include "Animation/AnimMontage.h"
+#include "FunctionalUIScreenshotTest.h"
+#include "Kismet/GameplayStatics.h"
 
 
 //cooldown
 
 //conditions, like collision and bitmask comparing
 
-//spawning, vfx, yadayada
+//spawning, vfx
 
 AAbility::AAbility()
 {
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-//
+void AAbility::BeginPlay()
+{
+	Super::BeginPlay();
+
+	Player = Cast<AHeroCharacter>(GetOwner());
+	if(Player)
+	{
+		AnimInstance = Player->GetMesh()->GetAnimInstance();
+	}
+}
 
 bool AAbility::IsBeingUsed()
 {
@@ -42,30 +54,30 @@ void AAbility::TryCast()
 	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
 	if(TimerManager.IsTimerActive(CoolDownTimerHandle) || TimerManager.IsTimerActive(CastTimerHandle)) return;
 
-	Cast();
+	CastAbility();
 
 	TimerManager.SetTimer(CoolDownTimerHandle, this, &AAbility::EndCoolDown, coolDownDuration, true);
 	
 }
 
-void AAbility::Cast()
+void AAbility::CastAbility()
 {
 	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
 	TimerManager.SetTimer(CastTimerHandle, this, &AAbility::EndCastDuration, castDuration, true);
-	
+
+	Player->PlayAnimMontage(this->AbilityAnimMontage, 1, NAME_None);
 	UE_LOG(LogTemp, Warning, TEXT("Im getting casted:>>"));
+}	
+
+void AAbility::OnAbilityDamage()
+{
 }
 
-void AAbility::BeginPlay()
-{
-	Super::BeginPlay();
-	
-	//const auto SubSystem = GetWorld()->GetSubsystem<UIntersectionSubsystem>();
-	
-}
 
 void AAbility::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	
 }
 
