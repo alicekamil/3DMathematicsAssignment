@@ -150,6 +150,7 @@ void AHeroCharacter::StartAbility1(const FInputActionValue& Value)
 		UE_LOG(LogTemp, Warning, TEXT("Pressed Q!"));
 		//GetMesh()->SetCustomDepthStencilValue(5);
 		AbilityComponent->StartAbility(0);
+	
 	}
 }
 

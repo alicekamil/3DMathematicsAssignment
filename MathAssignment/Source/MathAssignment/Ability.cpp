@@ -20,11 +20,11 @@ void AAbility::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Player = Cast<AHeroCharacter>(GetOwner());
-	if(Player)
-	{
-		AnimInstance = Player->GetMesh()->GetAnimInstance();
-	}
+	//Player = Cast<AHeroCharacter>(GetOwner());
+	//if(Player)
+	// {
+	// 	AnimInstance = Player->GetMesh()->GetAnimInstance();
+	// }
 }
 
 bool AAbility::IsBeingUsed()
@@ -49,15 +49,17 @@ void AAbility::EndCastDuration()
 	//Reset freeze for things u cant do when casting a spell
 }
 
-void AAbility::TryCast()
+UAnimMontage* AAbility::TryCast()
 {
 	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
-	if(TimerManager.IsTimerActive(CoolDownTimerHandle) || TimerManager.IsTimerActive(CastTimerHandle)) return;
-
+	if(TimerManager.IsTimerActive(CoolDownTimerHandle) || TimerManager.IsTimerActive(CastTimerHandle))
+	{
+		return nullptr;
+	}
 	CastAbility();
 
 	TimerManager.SetTimer(CoolDownTimerHandle, this, &AAbility::EndCoolDown, coolDownDuration, true);
-	
+	return AbilityAnimMontage;
 }
 
 void AAbility::CastAbility()
@@ -65,7 +67,7 @@ void AAbility::CastAbility()
 	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
 	TimerManager.SetTimer(CastTimerHandle, this, &AAbility::EndCastDuration, castDuration, true);
 
-	Player->PlayAnimMontage(this->AbilityAnimMontage, 1, NAME_None);
+	//Player->PlayAnimMontage(this->AbilityAnimMontage, 1, NAME_None);
 	UE_LOG(LogTemp, Warning, TEXT("Im getting casted:>>"));
 }	
 

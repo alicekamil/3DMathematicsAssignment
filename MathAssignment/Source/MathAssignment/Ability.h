@@ -12,8 +12,6 @@ class UAnimMontage;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAbilityDestroyed);
 
-
-
 UCLASS()
 class MATHASSIGNMENT_API AAbility : public AActor
 {
@@ -53,7 +51,7 @@ public:
 	bool IsBeingUsed();
 	void EndCoolDown();
 	void EndCastDuration();
-	void TryCast();
+	UAnimMontage* TryCast();
 	virtual void CastAbility();
 
 	virtual void OnAbilityDamage();

@@ -76,7 +76,13 @@ void UAbilityComponent::StartAbility(int index)
 	if(UContextHelpers::ContextPredicate(Player->SubSystem->CurrentContext, Abilities[index]->Context))
 	{
 		currAbility = Abilities[index];
-		Abilities[index]->TryCast();
+		if(auto castedAnimMontage = Abilities[index]->TryCast(); castedAnimMontage)
+		{
+			Player->PlayAnimMontage(castedAnimMontage, 1, NAME_None);
+		}
+			
+			
+		
 		
 		UE_LOG(LogTemp, Warning, TEXT("Called trycast"));
 	}
