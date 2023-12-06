@@ -75,14 +75,22 @@ void UAbilityComponent::StartAbility(int index)
 	if(UContextHelpers::ContextPredicate(Player->SubSystem->CurrentContext, Abilities[index]->Context))
 	{
 		currAbility = Abilities[index];
-		if(auto castedAnimMontage = Abilities[index]->TryCast(); castedAnimMontage)
+		if(auto properties = Abilities[index]->TryCast(); properties.AbilityAnimMontage) //?
 		{
-			Player->PlayAnimMontage(castedAnimMontage, 1, NAME_None);
-			//Return vfx on specific ability
-			//Event on montage- 
-		}
+			Player->PlayAnimMontage(properties.AbilityAnimMontage, 1, NAME_None);
+			//SpawnInitVFX(properties.InitVFX);
+			//Look at cursor(player)
+			//Player is immobile(player)
+			//The montage abilityStart = Plays VFX(ability? but it passes it from the struct so maybe here?)
+			//The montage Damage(enemy?)
+			//The montage ability"End" = Ability
+
+			//Questions to Martin:
+			//1. Animation montage, how to play next "sequence..?" How does it work in general:>
+			//2. How to "spawn" and "destroy" abilites?
+			//3. Setting up damage- collision, enemy?
 			
-		
+		}
 		UE_LOG(LogTemp, Warning, TEXT("Called trycast"));
 	}
 	UE_LOG(LogTemp, Warning, TEXT("Failed"));

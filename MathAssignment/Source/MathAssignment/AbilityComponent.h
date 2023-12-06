@@ -27,10 +27,7 @@ public:
 	UAbilityComponent();
 
 	TObjectPtr<AHeroCharacter> Player; //?
-
-	UPROPERTY(VisibleAnywhere)
-	EAbilityTypes SelectedAbilityType;
-
+	
 	TArray<int32> abilityContexts;
 	void GetAbilityContexts(TArray<AAbility*> ContextAbilities);
 
@@ -41,6 +38,7 @@ public:
 	bool IsAnyAbilityBeingUsed();
 	bool GetCanUseAbility();
 	void StartAbility(int index);
+	
 	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 							   FActorComponentTickFunction* ThisTickFunction) override;

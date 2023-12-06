@@ -5,6 +5,7 @@
 #include "GameFramework/Actor.h"
 #include "HeroCharacter.h"
 #include "ContextHelpers.h"
+#include "SpawnVFX.h"
 #include "Ability.generated.h"
 
 class UAnimInstance;
@@ -12,8 +13,36 @@ class UAnimMontage;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAbilityDestroyed);
 
+USTRUCT(BlueprintType)
+struct FProperties
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* AbilityAnimMontage;
+
+	UPROPERTY(EditAnywhere)
+	UFXSystemAsset* InitVFX;
+	UPROPERTY(EditAnywhere)
+	UFXSystemAsset* ImpactVFX;
+	
+	UPROPERTY(EditAnywhere)
+	float HurtBox;
+	UPROPERTY(EditAnywhere)
+	float HurtBoxRange;
+	UPROPERTY(EditAnywhere)
+	float HurtWidth;
+	UPROPERTY(EditAnywhere)
+	float HurtHeight;
+	UPROPERTY(EditAnywhere)
+	float HurtBoxLifeTime; 
+	UPROPERTY(EditAnywhere)
+	float DamageIntensity; /***/
+	
+};
+
 UCLASS()
-class MATHASSIGNMENT_API AAbility : public AActor
+class MATHASSIGNMENT_API AAbility : public AActor, public ISpawnVFX
 {
 	GENERATED_BODY()
 
@@ -24,7 +53,10 @@ public:
 	//OnStartUsed - called from Ability component - abstract
 	//OnEndUsed - called from Ability component - abstract
 	//IsBeingUsed(bool) - called from Ability component - abstract
-
+	
+	
+	
+	
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="State", meta=(Bitmask, BitmaskEnum = "ERelativeContext"))
 	int32 Context;
@@ -33,7 +65,7 @@ public:
 	UTexture2D* Icon;
 
 	UPROPERTY(EditAnywhere)
-	UAnimMontage* AbilityAnimMontage;
+	FProperties properties;
 
 	UPROPERTY(EditAnywhere)
 	FName AbilityName;
@@ -49,14 +81,16 @@ public:
 	bool IsBeingUsed();
 	void EndCoolDown();
 	void EndCastDuration();
-	UAnimMontage* TryCast();
+	FProperties TryCast();
 	virtual void CastAbility();
 
 	virtual void OnAbilityDamage();
-	
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	virtual void SpawnInitVFX(UFXSystemAsset* VFX) override;
 	
 	TObjectPtr<AHeroCharacter> Player;
 	UPROPERTY(EditAnywhere)
@@ -65,4 +99,6 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	//virtual void SpawnInitVFX(UFXSystemAsset* VFX) override;
 };

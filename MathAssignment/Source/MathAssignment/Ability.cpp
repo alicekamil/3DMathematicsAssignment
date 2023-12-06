@@ -1,6 +1,8 @@
 
 #include "Ability.h"
 #include "Animation/AnimMontage.h"
+#include "GenericPlatform/GenericPlatformCrashContext.h"
+#include "Kismet/GameplayStatics.h"
 
 //cooldown
 
@@ -12,6 +14,12 @@ AAbility::AAbility()
 {
 	PrimaryActorTick.bCanEverTick = true;
 }
+
+void AAbility::SpawnInitVFX(UFXSystemAsset* VFX)
+{
+	ISpawnVFX::SpawnInitVFX(VFX);
+}
+
 
 void AAbility::BeginPlay()
 {
@@ -40,17 +48,17 @@ void AAbility::EndCastDuration()
 	//Reset freeze for things u cant do when casting a spell
 }
 
-UAnimMontage* AAbility::TryCast()
+FProperties AAbility::TryCast()
 {
 	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
 	if(TimerManager.IsTimerActive(CoolDownTimerHandle) || TimerManager.IsTimerActive(CastTimerHandle))
 	{
-		return nullptr;
+		return FProperties();
 	}
 	CastAbility();
 
 	TimerManager.SetTimer(CoolDownTimerHandle, this, &AAbility::EndCoolDown, coolDownDuration, true);
-	return AbilityAnimMontage;
+	return properties;
 }
 
 void AAbility::CastAbility()
@@ -70,7 +78,7 @@ void AAbility::OnAbilityDamage()
 void AAbility::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 	
 }
 
