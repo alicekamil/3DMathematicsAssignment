@@ -2,7 +2,6 @@
 #include "ContextHelpers.h"
 #include "IntersectionSubSystem.h"
 #include "Engine/GameInstance.h"
-#include "Kismet/GameplayStatics.h"
 
 
 UAbilityComponent::UAbilityComponent()
@@ -79,10 +78,10 @@ void UAbilityComponent::StartAbility(int index)
 		if(auto castedAnimMontage = Abilities[index]->TryCast(); castedAnimMontage)
 		{
 			Player->PlayAnimMontage(castedAnimMontage, 1, NAME_None);
+			//Return vfx on specific ability
+			//Event on montage- 
 		}
 			
-			
-		
 		
 		UE_LOG(LogTemp, Warning, TEXT("Called trycast"));
 	}

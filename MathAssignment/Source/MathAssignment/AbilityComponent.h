@@ -4,11 +4,9 @@
 #include "CoreMinimal.h"
 #include "HeroCharacter.h"
 #include "Ability.h"
-#include "AbilityTypes.h"
 #include "IntersectionSubSystem.h"
 #include "Components/ActorComponent.h"
 #include "AbilityComponent.generated.h"
-
 
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))

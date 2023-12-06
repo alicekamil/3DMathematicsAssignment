@@ -1,9 +1,6 @@
 
 #include "Ability.h"
 #include "Animation/AnimMontage.h"
-#include "FunctionalUIScreenshotTest.h"
-#include "Kismet/GameplayStatics.h"
-
 
 //cooldown
 
@@ -19,12 +16,6 @@ AAbility::AAbility()
 void AAbility::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//Player = Cast<AHeroCharacter>(GetOwner());
-	//if(Player)
-	// {
-	// 	AnimInstance = Player->GetMesh()->GetAnimInstance();
-	// }
 }
 
 bool AAbility::IsBeingUsed()
@@ -67,12 +58,12 @@ void AAbility::CastAbility()
 	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
 	TimerManager.SetTimer(CastTimerHandle, this, &AAbility::EndCastDuration, castDuration, true);
 
-	//Player->PlayAnimMontage(this->AbilityAnimMontage, 1, NAME_None);
 	UE_LOG(LogTemp, Warning, TEXT("Im getting casted:>>"));
 }	
 
 void AAbility::OnAbilityDamage()
 {
+
 }
 
 
