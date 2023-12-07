@@ -37,6 +37,13 @@ public:
 	UFUNCTION()
 	UAbilityComponent* GetAbilityComponent();
 
+	bool canMove = true;
+	
+	UFUNCTION()
+	void SetLookAtCursor();
+	UFUNCTION(BlueprintCallable)
+	void SetCharacterMobility(bool isDone);
+
 private:
 
 	UPROPERTY(VisibleAnywhere)
@@ -44,8 +51,9 @@ private:
 	
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* CameraCrane;
-
+	
 	float targetArmLength;
+
 	
 protected:
 

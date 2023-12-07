@@ -17,6 +17,9 @@ USTRUCT(BlueprintType)
 struct FProperties
 {
 	GENERATED_BODY()
+
+	UPROPERTY()
+	float castdurationproperty;
 	
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* AbilityAnimMontage;
@@ -53,9 +56,6 @@ public:
 	//OnStartUsed - called from Ability component - abstract
 	//OnEndUsed - called from Ability component - abstract
 	//IsBeingUsed(bool) - called from Ability component - abstract
-	
-	
-	
 	
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="State", meta=(Bitmask, BitmaskEnum = "ERelativeContext"))

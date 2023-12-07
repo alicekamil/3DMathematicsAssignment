@@ -4,12 +4,15 @@
 #include "Constants.h"
 #include "ShapeDrawUtility.h"
 #include "Components/InputComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "EnhancedInputComponent.h"
 #include "IntersectionSubsystem.h"
 #include "AbilityComponent.h"
+#include "InteractiveToolManager.h"
 #include "GameFramework/CharacterMovementComponent.h"
+
 
 // Sets default values
 AHeroCharacter::AHeroCharacter()
@@ -99,6 +102,31 @@ UAbilityComponent* AHeroCharacter::GetAbilityComponent()
 	return AbilityComponent;
 }
 
+// When launching an ability, the character will be facing the same direction as the cursor
+void AHeroCharacter::SetLookAtCursor()
+{
+	
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	if (PlayerController)
+	{
+		FHitResult hitResult;
+		PlayerController->GetHitResultUnderCursor(ECC_Visibility, false, hitResult);
+		
+		FVector mouseLocation = hitResult.Location;
+		FVector normal = hitResult.ImpactNormal;
+		FRotator NewRotation = UKismetMathLibrary::FindLookAtRotation(this->GetActorLocation() * FVector(1,1,0), mouseLocation * FVector(1,1,0));
+		this->SetActorRotation(NewRotation);
+		
+		UE_LOG(LogTemp, Warning, TEXT("SetActorrotation!"));
+		
+	}
+}
+
+void AHeroCharacter::SetCharacterMobility(bool isDone)
+{
+	canMove = isDone;
+}
+
 void AHeroCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -128,7 +156,8 @@ void AHeroCharacter::BeginPlay()
 
 void AHeroCharacter::Move(const FInputActionValue& Value)
 {
-	//ActionState != EActionState::EAS_Unoccupied) return;
+	if(canMove == false) return;
+	
 	const FVector2D MovementVector = Value.Get<FVector2D>();
 
 	//const FVector Forward = GetActorForwardVector();
@@ -150,7 +179,6 @@ void AHeroCharacter::StartAbility1(const FInputActionValue& Value)
 		UE_LOG(LogTemp, Warning, TEXT("Pressed Q!"));
 		//GetMesh()->SetCustomDepthStencilValue(5);
 		AbilityComponent->StartAbility(0);
-	
 	}
 }
 
