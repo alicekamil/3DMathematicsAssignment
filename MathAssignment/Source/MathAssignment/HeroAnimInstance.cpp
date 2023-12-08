@@ -11,6 +11,7 @@ void UHeroAnimInstance::NativeInitializeAnimation()
 	Character = Cast<AHeroCharacter>(TryGetPawnOwner());
 	if (Character)
 	{
+		AbilityComponent = Character->GetAbilityComponent();
 		CharacterMovement = Character->GetCharacterMovement();
 	}
 	

@@ -25,6 +25,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SpawnInitVFX(UFXSystemAsset* VFX) override;
+	
 
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* particleSystem;

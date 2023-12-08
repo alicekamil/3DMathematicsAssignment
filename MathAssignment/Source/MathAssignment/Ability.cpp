@@ -19,6 +19,11 @@ void AAbility::SpawnInitVFX(UFXSystemAsset* VFX)
 	ISpawnVFX::SpawnInitVFX(VFX);
 }
 
+ void AAbility::BPSpawnVFX(UFXSystemAsset* VFX)
+ {
+ 	ISpawnVFX::BPSpawnVFX(VFX);
+ }
+
 
 void AAbility::BeginPlay()
 {

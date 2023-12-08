@@ -30,7 +30,9 @@ public:
 	
 	TArray<int32> abilityContexts;
 	void GetAbilityContexts(TArray<AAbility*> ContextAbilities);
-
+	
+	UFUNCTION(BlueprintCallable)
+	void PlayVFX();
 	UPROPERTY()
 	UIntersectionSubsystem* SubSystem;
 	
@@ -40,11 +42,14 @@ public:
 	void StartAbility(int index);
 	
 	
+	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 							   FActorComponentTickFunction* ThisTickFunction) override;
 
 protected:
 
 	virtual void BeginPlay() override;
+
+	
 
 };

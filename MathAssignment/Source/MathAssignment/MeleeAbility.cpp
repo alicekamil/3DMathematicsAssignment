@@ -18,12 +18,6 @@ void AMeleeAbility::BeginPlay()
 void AMeleeAbility::SpawnInitVFX(UFXSystemAsset* VFX)
 {
 	Super::SpawnInitVFX(VFX);
-	//AActor* character = GetOwner();
-	//FTransform spawnPos;
-	UParticleSystem* InitVFX = Cast<UParticleSystem>(VFX);
-	
-	UGameplayStatics::SpawnEmitterAttached() 
-	
 }
 
 // Called every frame

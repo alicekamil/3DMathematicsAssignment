@@ -26,6 +26,11 @@ void UAbilityComponent::BeginPlay()
 	GetAbilityContexts(Abilities);
 }
 
+void UAbilityComponent::PlayVFX() 
+{
+	Execute_BPSpawnVFX(currAbility, currAbility->properties.InitVFX); 
+}
+
 void UAbilityComponent::TickComponent(float DeltaTime, ELevelTick TickType,
                                       FActorComponentTickFunction* ThisTickFunction)
 {
@@ -81,9 +86,13 @@ void UAbilityComponent::StartAbility(int index)
 			Player->PlayAnimMontage(properties.AbilityAnimMontage, 1, NAME_None);
 			Player->SetLookAtCursor();
 			Player->SetCharacterMobility(false);
+			auto location = Player->GetActorLocation();
+			auto rotation = Player->GetActorRotation();
+			currAbility->SetActorLocationAndRotation(location, rotation);
+			//PlayVFX(Abilities[index], properties.InitVFX);
+			//Execute_BPSpawnVFX(Abilities[index], properties.InitVFX); 
 			//Abilities[index]->SpawnInitVFX(properties.InitVFX);
 			//UGameplayStatics::SpawnEmitterAttached(properties.InitVFX, this, NAME_None, GetOwner()->GetActorLocation(), FRotator::ZeroRotator, FVector(1), )
-			
 			//In anim montage event - Player->SetCharacterMobility(true);
 			
 			//SpawnInitVFX(properties.InitVFX);
@@ -92,9 +101,7 @@ void UAbilityComponent::StartAbility(int index)
 			//The montage abilityStart = Plays VFX(ability? but it passes it from the struct so maybe here?)
 			//The montage Damage(enemy?)
 			//The montage ability"End" = Ability
-
-			//Questions to Martin:
-			//1. Animation montage, how to play next "sequence..?" How does it work in general:>
+			
 			//2. How to "spawn" and "destroy" abilites when theyre init in start, object pooling, what is it that will be created and destroyed?
 			//3. Setting up damage- collision, enemy?
 			

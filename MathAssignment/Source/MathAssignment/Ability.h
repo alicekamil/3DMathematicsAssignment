@@ -18,9 +18,6 @@ USTRUCT(BlueprintType)
 struct FProperties
 {
 	GENERATED_BODY()
-
-	UPROPERTY()
-	float castdurationproperty;
 	
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* AbilityAnimMontage;
@@ -101,6 +98,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SpawnInitVFX(UFXSystemAsset* VFX) override;
+	virtual void BPSpawnVFX(UFXSystemAsset* VFX);
 
 	//virtual void SpawnInitVFX(UFXSystemAsset* VFX) override;
 };

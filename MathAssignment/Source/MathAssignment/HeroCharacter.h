@@ -31,7 +31,7 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* ViewCamera;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	UAbilityComponent* GetAbilityComponent();
 
 	bool canMove = true;
