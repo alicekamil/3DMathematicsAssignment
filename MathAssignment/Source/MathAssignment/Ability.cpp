@@ -1,7 +1,6 @@
 
 #include "Ability.h"
 #include "Animation/AnimMontage.h"
-#include "GenericPlatform/GenericPlatformCrashContext.h"
 #include "Kismet/GameplayStatics.h"
 
 //cooldown
@@ -65,8 +64,6 @@ void AAbility::CastAbility()
 {
 	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
 	TimerManager.SetTimer(CastTimerHandle, this, &AAbility::EndCastDuration, castDuration, true);
-
-	UE_LOG(LogTemp, Warning, TEXT("Im getting casted:>>"));
 }	
 
 void AAbility::OnAbilityDamage()
@@ -78,7 +75,5 @@ void AAbility::OnAbilityDamage()
 void AAbility::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
-	
 }
 

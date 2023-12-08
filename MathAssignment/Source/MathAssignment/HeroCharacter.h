@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -9,7 +8,6 @@
 #include "IntersectionSubSystem.h"
 #include "HeroCharacter.generated.h"
 
-//class AAbility;
 class USpringArmComponent;
 class UCameraComponent;
 class UAbilityComponent;
@@ -23,7 +21,6 @@ class MATHASSIGNMENT_API AHeroCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	AHeroCharacter();
 
 	virtual void Jump() override;
@@ -145,11 +142,9 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly, Category = Spells)
 	bool IsCurrentlyPlayingSpell = false;
-
-	// Called every frame
+	
 	virtual void Tick(float DeltaTime) override;
 	
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 };

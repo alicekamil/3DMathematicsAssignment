@@ -10,6 +10,7 @@
 
 class UAnimInstance;
 class UAnimMontage;
+class UParticleSystem;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAbilityDestroyed);
 
@@ -90,7 +91,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	virtual void SpawnInitVFX(UFXSystemAsset* VFX) override;
 	
 	TObjectPtr<AHeroCharacter> Player;
 	UPROPERTY(EditAnywhere)
@@ -99,6 +99,8 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	virtual void SpawnInitVFX(UFXSystemAsset* VFX) override;
 
 	//virtual void SpawnInitVFX(UFXSystemAsset* VFX) override;
 };

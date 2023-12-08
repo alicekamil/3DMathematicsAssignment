@@ -10,7 +10,7 @@
 
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
-class MATHASSIGNMENT_API UAbilityComponent : public UActorComponent
+class MATHASSIGNMENT_API UAbilityComponent : public UActorComponent, public ISpawnVFX
 {
 	GENERATED_BODY()
 

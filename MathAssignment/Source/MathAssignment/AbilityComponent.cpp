@@ -2,6 +2,7 @@
 #include "ContextHelpers.h"
 #include "IntersectionSubSystem.h"
 #include "Engine/GameInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 
 UAbilityComponent::UAbilityComponent()
@@ -80,6 +81,8 @@ void UAbilityComponent::StartAbility(int index)
 			Player->PlayAnimMontage(properties.AbilityAnimMontage, 1, NAME_None);
 			Player->SetLookAtCursor();
 			Player->SetCharacterMobility(false);
+			//Abilities[index]->SpawnInitVFX(properties.InitVFX);
+			//UGameplayStatics::SpawnEmitterAttached(properties.InitVFX, this, NAME_None, GetOwner()->GetActorLocation(), FRotator::ZeroRotator, FVector(1), )
 			
 			//In anim montage event - Player->SetCharacterMobility(true);
 			

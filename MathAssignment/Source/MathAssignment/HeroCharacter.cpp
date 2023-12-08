@@ -1,7 +1,6 @@
 #include "HeroCharacter.h"
 #include "DrawDebugHelpers.h"
 #include "EnhancedInputSubSystems.h"
-#include "Constants.h"
 #include "ShapeDrawUtility.h"
 #include "Components/InputComponent.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -10,11 +9,8 @@
 #include "EnhancedInputComponent.h"
 #include "IntersectionSubsystem.h"
 #include "AbilityComponent.h"
-#include "InteractiveToolManager.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
-
-// Sets default values
 AHeroCharacter::AHeroCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -33,12 +29,33 @@ AHeroCharacter::AHeroCharacter()
 	ViewCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	ViewCamera->SetupAttachment(CameraCrane);
 
-	AutoPossessPlayer = EAutoReceiveInput::Player0;
-
 	AbilityComponent = CreateDefaultSubobject<UAbilityComponent>(TEXT("AbilityComponent"));
-	
+
+	AutoPossessPlayer = EAutoReceiveInput::Player0;
 }
 
+void AHeroCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (APlayerController* PlayerController = Cast<APlayerController>(GetController())) //TODO: Cast? Temporary pointer, freed up instantly.
+	{
+		PlayerController->SetShowMouseCursor(true);
+		
+		SubSystem = GetWorld()->GetSubsystem<UIntersectionSubsystem>();
+		if(SubSystem)
+		{
+			SubSystem->RegisterPlayerController(PlayerController);
+			SubSystem->SetPlayerCharacter(this);
+		}
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			Subsystem->AddMappingContext(HeroMappingContext, 0);
+		}
+	}
+	GetMesh()->SetRenderCustomDepth(true);
+	GetMesh()->SetCustomDepthStencilValue(1);
+}
 
 
 void AHeroCharacter::DrawShape(const FColor Color)
@@ -77,7 +94,7 @@ void AHeroCharacter::DrawShape(const FColor Color)
 
 void AHeroCharacter::CameraZoomIn()
 {
-	//if right click is not held return
+	//TODO: if right click is not held return
 	
 	targetArmLength = FMath::Clamp((targetArmLength + 200.f), zoomMin, zoomMax);
 	CameraCrane->TargetArmLength = targetArmLength;
@@ -85,7 +102,7 @@ void AHeroCharacter::CameraZoomIn()
 
 void AHeroCharacter::CameraZoomOut()
 {
-	//if right click is not held return
+	//TODO: if right click is not held return
 	//float value = desiredCamDistance - 200.f;
 	//desiredCamDistance = FMath::Clamp(value, zoomMin, zoomMax);
 	targetArmLength = FMath::Clamp((targetArmLength - 200.f), zoomMin, zoomMax);
@@ -126,33 +143,6 @@ void AHeroCharacter::SetCharacterMobility(bool isDone)
 {
 	canMove = isDone;
 }
-
-void AHeroCharacter::BeginPlay()
-{
-	Super::BeginPlay();
-
-	if (APlayerController* PlayerController = Cast<APlayerController>(GetController())) //TODO: Cast? Temporary pointer, freed up instantly.
-	{
-		PlayerController->SetShowMouseCursor(true);
-		
-		//const auto
-		SubSystem = GetWorld()->GetSubsystem<UIntersectionSubsystem>();
-		if(SubSystem)
-		{
-			SubSystem->RegisterPlayerController(PlayerController);
-			SubSystem->SetPlayerCharacter(this);
-		}
-		
-		
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-		{
-			Subsystem->AddMappingContext(HeroMappingContext, 0);
-		}
-	}
-	GetMesh()->SetRenderCustomDepth(true);
-	GetMesh()->SetCustomDepthStencilValue(1);
-}
-
 
 void AHeroCharacter::Move(const FInputActionValue& Value)
 {
@@ -234,8 +224,6 @@ void AHeroCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AHeroCharacter::Look);
 		EnhancedInputComponent->BindAction(CamZoomInAction, ETriggerEvent::Triggered, this, &AHeroCharacter::CameraZoomIn);
 		EnhancedInputComponent->BindAction(CamZoomOutAction, ETriggerEvent::Triggered, this, &AHeroCharacter::CameraZoomOut);
-		
-		
 	}
 
 
