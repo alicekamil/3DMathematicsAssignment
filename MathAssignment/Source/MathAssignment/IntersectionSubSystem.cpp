@@ -95,7 +95,7 @@ void UIntersectionSubsystem::Tick(float DeltaTime)
 						FColor::Cyan
 						);
 					Demonstrator->StaticMeshComponent->SetCustomDepthStencilValue(0);
-					Player->GetMesh()->SetCustomDepthStencilValue(253);
+					//Player->GetMesh()->SetCustomDepthStencilValue(253);
 				}
 			}
 

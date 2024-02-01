@@ -53,8 +53,8 @@ void AHeroCharacter::BeginPlay()
 			Subsystem->AddMappingContext(HeroMappingContext, 0);
 		}
 	}
-	GetMesh()->SetRenderCustomDepth(true);
-	GetMesh()->SetCustomDepthStencilValue(1);
+	//GetMesh()->SetRenderCustomDepth(true);
+	//GetMesh()->SetCustomDepthStencilValue(1);
 }
 
 
